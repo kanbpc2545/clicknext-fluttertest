@@ -1,4 +1,4 @@
-import 'package:clicknext_test/page/usersList.dart';
+import 'package:clicknext_test/page/users_list.dart';
 import 'package:clicknext_test/service/provider/appdata.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,12 +18,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      // title: 'Clicknext Test',
-      home: const UserList(),
+    return const GetMaterialApp(
+      home: UserList(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -44,6 +44,9 @@ dependencies:
   get_storage: ^2.1.1
   google_fonts: ^5.1.0
   gap: ^3.0.1
+  skeleton_text: ^3.0.0
+  skeletons: ^0.0.3
+  
 
 dev_dependencies:
   flutter_test:
