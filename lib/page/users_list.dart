@@ -60,15 +60,13 @@ class _UserListState extends State<UserList> {
                     title: Text(
                       users[index].login,
                       style: GoogleFonts.roboto(
-                          fontSize: 20,
-                          fontWeight: Fw.regular,
-                          color: Colors.white),
+                          fontSize: 20, fontWeight: Fw.regular, color: cText),
                     ),
                     subtitle: Text(users[index].htmlUrl,
                         style: const TextStyle(
                             fontSize: 12,
                             fontWeight: Fw.regular,
-                            color: Colors.white)),
+                            color: cSubText)),
                     leading: SizedBox(
                       width: 60,
                       height: 60,
@@ -107,6 +105,7 @@ class _UserListState extends State<UserList> {
 
   Future<void> loadData() async {
     await Future.delayed(const Duration(seconds: 1));
+
     HttpResponse<List<Users>> response = await usersService.getUsers();
     users = response.data;
   }

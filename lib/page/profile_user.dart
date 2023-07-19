@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:clicknext_test/model/repositories_model.dart';
 import 'package:clicknext_test/model/users_model.dart';
+import 'package:clicknext_test/service/followers.dart';
 import 'package:clicknext_test/widget/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -19,13 +22,17 @@ class ProfileUser extends StatefulWidget {
 }
 
 class _ProfileUserState extends State<ProfileUser> {
+  late FollowerService followerService;
   late UsersService usersService;
   List<Repos> repositories = [];
+  List<Users> followers = [];
+  List<Users> following = [];
 
   @override
   void initState() {
     super.initState();
     usersService = UsersService(Dio(), baseUrl: AppData.baseurl);
+    followerService = FollowerService(Dio(), baseUrl: AppData.baseurl);
   }
 
   @override
@@ -75,7 +82,7 @@ class _ProfileUserState extends State<ProfileUser> {
                                     style: GoogleFonts.roboto(
                                         fontSize: 24,
                                         fontWeight: Fw.regular,
-                                        color: Colors.white),
+                                        color: cText),
                                   ),
                                   const Gap(5),
                                   Text(
@@ -83,12 +90,55 @@ class _ProfileUserState extends State<ProfileUser> {
                                     style: GoogleFonts.roboto(
                                         fontSize: 14,
                                         fontWeight: Fw.regular,
-                                        color: Colors.white),
+                                        color: cText),
                                   ),
                                 ],
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      SizedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.people_alt_outlined,
+                                color: cSubText,
+                                size: 14,
+                              ),
+                              Gap(5),
+                              Text(
+                                '${followers.length} ',
+                                style: GoogleFonts.roboto(
+                                    fontSize: 14,
+                                    fontWeight: Fw.regular,
+                                    color: cText),
+                              ),
+                              Text(
+                                'followers · ',
+                                style: GoogleFonts.roboto(
+                                    fontSize: 14,
+                                    fontWeight: Fw.regular,
+                                    color: cSubText),
+                              ),
+                              Text(
+                                '${following.length} ',
+                                style: GoogleFonts.roboto(
+                                    fontSize: 14,
+                                    fontWeight: Fw.regular,
+                                    color: cText),
+                              ),
+                              Text(
+                                'following',
+                                style: GoogleFonts.roboto(
+                                    fontSize: 14,
+                                    fontWeight: Fw.regular,
+                                    color: cSubText),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const Gap(10),
@@ -101,7 +151,7 @@ class _ProfileUserState extends State<ProfileUser> {
                               Text(
                                 'Reponsitories ',
                                 style: GoogleFonts.roboto(
-                                    color: Colors.white,
+                                    color: cText,
                                     fontWeight: Fw.regular,
                                     fontSize: 24),
                               ),
@@ -114,7 +164,7 @@ class _ProfileUserState extends State<ProfileUser> {
                                     child: Text(
                                       '${repositories.length}',
                                       style: GoogleFonts.roboto(
-                                          color: Colors.white,
+                                          color: cText,
                                           fontWeight: Fw.regular,
                                           fontSize: 24),
                                     ),
@@ -134,7 +184,7 @@ class _ProfileUserState extends State<ProfileUser> {
                                   child: Text(
                                     repositories[i].name,
                                     style: GoogleFonts.roboto(
-                                        color: Colors.white,
+                                        color: cText,
                                         fontWeight: Fw.regular,
                                         fontSize: 16),
                                   ),
@@ -142,7 +192,7 @@ class _ProfileUserState extends State<ProfileUser> {
                                 subtitle: Text(
                                   'https://github.com/${repositories[i].fullName}',
                                   style: GoogleFonts.roboto(
-                                      color: Colors.white,
+                                      color: cSubText,
                                       fontWeight: Fw.regular,
                                       fontSize: 12),
                                 ),
@@ -184,5 +234,11 @@ class _ProfileUserState extends State<ProfileUser> {
     HttpResponse<List<Repos>> response =
         await usersService.getRepos(widget.user.login);
     repositories = response.data;
+    HttpResponse<List<Users>> response1 =
+        await followerService.getFollower(widget.user.login);
+    followers = response1.data;
+    HttpResponse<List<Users>> response2 =
+        await followerService.getFollowing(widget.user.login);
+    following = response2.data;
   }
 }

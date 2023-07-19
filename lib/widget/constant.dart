@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 const cBar = Color(0xFF010409);
 const cBody = Color(0xFF161b22);
+const cSubText = Color(0xFF8B949E);
+const cText = Color(0xFFC9D1D9);
 
 class Fw {
   static const extraLight = FontWeight.w200;
