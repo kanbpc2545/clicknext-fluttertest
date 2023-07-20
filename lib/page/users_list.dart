@@ -104,8 +104,6 @@ class _UserListState extends State<UserList> {
   }
 
   Future<void> loadData() async {
-    await Future.delayed(const Duration(seconds: 1));
-
     HttpResponse<List<Users>> response = await usersService.getUsers();
     users = response.data;
   }
