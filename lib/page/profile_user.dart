@@ -103,12 +103,12 @@ class _ProfileUserState extends State<ProfileUser> {
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.people_alt_outlined,
                                 color: cSubText,
                                 size: 14,
                               ),
-                              Gap(5),
+                              const Gap(5),
                               Text(
                                 '${followers.length} ',
                                 style: GoogleFonts.roboto(
