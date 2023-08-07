@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:clicknext_test/page/profile_user.dart';
 import 'package:clicknext_test/service/provider/appdata.dart';
 import 'package:clicknext_test/service/users.dart';
@@ -55,18 +57,14 @@ class _UserListState extends State<UserList> {
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
                     Get.to(() => ProfileUser(user: users[index]));
+                    log(index.toString());
                   },
                   child: ListTile(
                     title: Text(
                       users[index].login,
-                      style: GoogleFonts.roboto(
-                          fontSize: 20, fontWeight: Fw.regular, color: cText),
+                      style: GoogleFonts.roboto(fontSize: 20, fontWeight: Fw.regular, color: cText),
                     ),
-                    subtitle: Text(users[index].htmlUrl,
-                        style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: Fw.regular,
-                            color: cSubText)),
+                    subtitle: Text(users[index].htmlUrl, style: const TextStyle(fontSize: 12, fontWeight: Fw.regular, color: cSubText)),
                     leading: SizedBox(
                       width: 60,
                       height: 60,
@@ -81,18 +79,9 @@ class _UserListState extends State<UserList> {
               return SkeletonListView(
                 item: SkeletonListTile(
                   verticalSpacing: 12,
-                  leadingStyle: const SkeletonAvatarStyle(
-                      width: 60, height: 60, shape: BoxShape.circle),
-                  titleStyle: SkeletonLineStyle(
-                      height: 20,
-                      minLength: 100,
-                      randomLength: true,
-                      borderRadius: BorderRadius.circular(12)),
-                  subtitleStyle: SkeletonLineStyle(
-                      height: 12,
-                      minLength: 200,
-                      randomLength: true,
-                      borderRadius: BorderRadius.circular(12)),
+                  leadingStyle: const SkeletonAvatarStyle(width: 60, height: 60, shape: BoxShape.circle),
+                  titleStyle: SkeletonLineStyle(height: 20, minLength: 100, randomLength: true, borderRadius: BorderRadius.circular(12)),
+                  subtitleStyle: SkeletonLineStyle(height: 12, minLength: 200, randomLength: true, borderRadius: BorderRadius.circular(12)),
                   hasSubtitle: true,
                 ),
               );

@@ -4,11 +4,9 @@
 
 import 'dart:convert';
 
-List<Users> usersFromJson(String str) =>
-    List<Users>.from(json.decode(str).map((x) => Users.fromJson(x)));
+List<Users> usersFromJson(String str) => List<Users>.from(json.decode(str).map((x) => Users.fromJson(x)));
 
-String usersToJson(List<Users> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String usersToJson(List<Users> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Users {
   String login;
@@ -96,8 +94,7 @@ class Users {
 
 enum Type { USER, ORGANIZATION }
 
-final typeValues =
-    EnumValues({"Organization": Type.ORGANIZATION, "User": Type.USER});
+final typeValues = EnumValues({"Organization": Type.ORGANIZATION, "User": Type.USER});
 
 class EnumValues<T> {
   Map<String, T> map;
