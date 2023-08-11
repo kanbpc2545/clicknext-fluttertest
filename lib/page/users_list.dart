@@ -3,7 +3,6 @@ import 'package:clicknext_test/service/provider/appdata.dart';
 import 'package:clicknext_test/service/users.dart';
 import 'package:clicknext_test/widget/constant.dart';
 import 'package:dio/dio.dart';
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
@@ -11,8 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:retrofit/dio.dart';
 import 'package:search_highlight_text/search_highlight_text.dart';
 import 'package:skeletons/skeletons.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/users_model.dart';
 
@@ -72,15 +69,15 @@ class _UserListState extends State<UserList> {
                         search(searchText);
                         setState(() {});
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           filled: true,
                           fillColor: cBar,
                           hintText: 'Search',
-                          hintStyle: const TextStyle(color: cSubText),
+                          hintStyle: TextStyle(color: cSubText),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(30)),
                           ),
-                          suffixIcon: const Icon(Icons.search),
+                          suffixIcon: Icon(Icons.search),
                           suffixIconColor: cSubText),
                       style: const TextStyle(color: cText),
                     ),
@@ -115,11 +112,11 @@ class _UserListState extends State<UserList> {
                               icon: const Icon(Icons.share_sharp),
                               color: Colors.blueAccent,
                             ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.favorite_border),
-                              color: Colors.redAccent,
-                            ),
+                            // IconButton(
+                            //   onPressed: () {},
+                            //   icon: const Icon(Icons.favorite_border),
+                            //   color: Colors.redAccent,
+                            // ),
                           ],
                         ),
                         onTap: () {
