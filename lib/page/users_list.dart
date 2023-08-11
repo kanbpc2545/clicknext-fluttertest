@@ -11,6 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:retrofit/dio.dart';
 import 'package:search_highlight_text/search_highlight_text.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/users_model.dart';
 
@@ -37,7 +39,6 @@ class _UserListState extends State<UserList> {
 
   @override
   Widget build(BuildContext context) {
-    final words = nouns.take(50).toList();
     return RefreshIndicator(
       onRefresh: () async {
         loadData();
@@ -113,6 +114,11 @@ class _UserListState extends State<UserList> {
                               },
                               icon: const Icon(Icons.share_sharp),
                               color: Colors.blueAccent,
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.favorite_border),
+                              color: Colors.redAccent,
                             ),
                           ],
                         ),
