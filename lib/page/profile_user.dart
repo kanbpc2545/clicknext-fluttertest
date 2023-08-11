@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:clicknext_test/model/repositories_model.dart';
 import 'package:clicknext_test/model/users_model.dart';
 import 'package:clicknext_test/service/followers.dart';
