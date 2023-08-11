@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:clicknext_test/page/profile_user.dart';
 import 'package:clicknext_test/service/provider/appdata.dart';
 import 'package:clicknext_test/service/users.dart';
 import 'package:clicknext_test/widget/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retrofit/dio.dart';
@@ -81,35 +79,40 @@ class _UserListState extends State<UserList> {
                           ),
                           suffixIcon: Icon(Icons.search),
                           suffixIconColor: cSubText),
-                      style: TextStyle(color: cText),
+                      style: const TextStyle(color: cText),
                     ),
                   ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: result.length,
-                      itemBuilder: (context, index) => GestureDetector(
-                        onTap: () {
-                          Get.to(() => ProfileUser(user: result[index]));
-                          log(index.toString());
-                        },
-                        child: ListTile(
-                          title: SearchTextInheritedWidget(
-                            searchText: searchText,
-                            child: SearchHighlightText(
-                              highlightStyle: GoogleFonts.roboto(fontSize: 20, fontWeight: Fw.regular, color: Colors.yellowAccent),
-                              result[index].login,
-                              style: GoogleFonts.roboto(fontSize: 20, fontWeight: Fw.regular, color: cText),
-                            ),
-                          ),
-                          subtitle: Text(result[index].htmlUrl, style: const TextStyle(fontSize: 12, fontWeight: Fw.regular, color: cSubText)),
-                          leading: SizedBox(
-                            width: 60,
-                            height: 60,
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(result[index].avatarUrl),
-                            ),
+                      itemBuilder: (context, index) => ListTile(
+                        title: SearchTextInheritedWidget(
+                          searchText: searchText,
+                          child: SearchHighlightText(
+                            highlightStyle: GoogleFonts.roboto(fontSize: 20, fontWeight: Fw.regular, color: Colors.yellowAccent),
+                            result[index].login,
+                            style: GoogleFonts.roboto(fontSize: 20, fontWeight: Fw.regular, color: cText),
                           ),
                         ),
+                        subtitle: Text(result[index].htmlUrl, style: const TextStyle(fontSize: 12, fontWeight: Fw.regular, color: cSubText)),
+                        leading: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(result[index].avatarUrl),
+                          ),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () async {
+                            await share(result[index].htmlUrl);
+                          },
+                          iconSize: 25,
+                          icon: Icon(Icons.share_sharp),
+                          color: Colors.blueAccent,
+                        ),
+                        onTap: () {
+                          Get.to(() => ProfileUser(user: result[index]));
+                        },
                       ),
                     ),
                   ),
@@ -136,6 +139,10 @@ class _UserListState extends State<UserList> {
     List<Users> result = [];
     result = users.where((user) => user.login.toLowerCase().contains(username.toLowerCase())).toList();
     this.result = result;
+  }
+
+  Future<void> share(String url) async {
+    await FlutterShare.share(title: url, linkUrl: url);
   }
 
   Future<void> loadData() async {
