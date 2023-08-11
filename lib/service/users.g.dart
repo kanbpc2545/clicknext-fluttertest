@@ -32,7 +32,7 @@ class _UsersService implements UsersService {
     )
             .compose(
               _dio.options,
-              '/users',
+              '/users?per_page=100',
               queryParameters: queryParameters,
               data: _data,
             )

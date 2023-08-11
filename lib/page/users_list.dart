@@ -3,6 +3,7 @@ import 'package:clicknext_test/service/provider/appdata.dart';
 import 'package:clicknext_test/service/users.dart';
 import 'package:clicknext_test/widget/constant.dart';
 import 'package:dio/dio.dart';
+import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
@@ -36,6 +37,7 @@ class _UserListState extends State<UserList> {
 
   @override
   Widget build(BuildContext context) {
+    final words = nouns.take(50).toList();
     return RefreshIndicator(
       onRefresh: () async {
         loadData();
@@ -59,7 +61,7 @@ class _UserListState extends State<UserList> {
               return Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       onChanged: (searchText) {
                         this.searchText = searchText;
@@ -73,11 +75,11 @@ class _UserListState extends State<UserList> {
                           filled: true,
                           fillColor: cBar,
                           hintText: 'Search',
-                          hintStyle: TextStyle(color: cSubText),
+                          hintStyle: const TextStyle(color: cSubText),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
                           ),
-                          suffixIcon: Icon(Icons.search),
+                          suffixIcon: const Icon(Icons.search),
                           suffixIconColor: cSubText),
                       style: const TextStyle(color: cText),
                     ),
@@ -102,13 +104,17 @@ class _UserListState extends State<UserList> {
                             backgroundImage: NetworkImage(result[index].avatarUrl),
                           ),
                         ),
-                        trailing: IconButton(
-                          onPressed: () async {
-                            await share(result[index].htmlUrl);
-                          },
-                          iconSize: 25,
-                          icon: Icon(Icons.share_sharp),
-                          color: Colors.blueAccent,
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () async {
+                                await share(result[index].htmlUrl);
+                              },
+                              icon: const Icon(Icons.share_sharp),
+                              color: Colors.blueAccent,
+                            ),
+                          ],
                         ),
                         onTap: () {
                           Get.to(() => ProfileUser(user: result[index]));

@@ -10,7 +10,7 @@ part 'users.g.dart';
 abstract class UsersService {
   factory UsersService(Dio dio, {String baseUrl}) = _UsersService;
 
-  @GET("/users")
+  @GET("/users?per_page=100")
   Future<HttpResponse<List<Users>>> getUsers();
 
   @GET("/users/{name}/repos")
