@@ -6,9 +6,11 @@ import 'package:clicknext_test/service/users.dart';
 import 'package:clicknext_test/widget/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:retrofit/dio.dart';
+import 'package:search_highlight_text/search_highlight_text.dart';
 import 'package:skeletons/skeletons.dart';
 
 import '../model/users_model.dart';
@@ -23,11 +25,15 @@ class UserList extends StatefulWidget {
 class _UserListState extends State<UserList> {
   List<Users> users = [];
   late UsersService usersService;
+  List<Users> result = [];
+  late Future<void> loadDataMethod;
+  String searchText = '';
 
   @override
   void initState() {
     super.initState();
     usersService = UsersService(Dio(), baseUrl: AppData.baseurl);
+    loadDataMethod = loadData();
   }
 
   @override
@@ -49,31 +55,65 @@ class _UserListState extends State<UserList> {
           backgroundColor: cBar,
         ),
         body: FutureBuilder(
-          future: loadData(),
+          future: loadDataMethod,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) => GestureDetector(
-                  onTap: () {
-                    Get.to(() => ProfileUser(user: users[index]));
-                    log(index.toString());
-                  },
-                  child: ListTile(
-                    title: Text(
-                      users[index].login,
-                      style: GoogleFonts.roboto(fontSize: 20, fontWeight: Fw.regular, color: cText),
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: TextField(
+                      onChanged: (searchText) {
+                        this.searchText = searchText;
+                        if (searchText.isEmpty) {
+                          loadDataMethod;
+                        }
+                        search(searchText);
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: cBar,
+                          hintText: 'Search',
+                          hintStyle: TextStyle(color: cSubText),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          suffixIcon: Icon(Icons.search),
+                          suffixIconColor: cSubText),
+                      style: TextStyle(color: cText),
                     ),
-                    subtitle: Text(users[index].htmlUrl, style: const TextStyle(fontSize: 12, fontWeight: Fw.regular, color: cSubText)),
-                    leading: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(users[index].avatarUrl),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: result.length,
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {
+                          Get.to(() => ProfileUser(user: result[index]));
+                          log(index.toString());
+                        },
+                        child: ListTile(
+                          title: SearchTextInheritedWidget(
+                            searchText: searchText,
+                            child: SearchHighlightText(
+                              highlightStyle: GoogleFonts.roboto(fontSize: 20, fontWeight: Fw.regular, color: Colors.yellowAccent),
+                              result[index].login,
+                              style: GoogleFonts.roboto(fontSize: 20, fontWeight: Fw.regular, color: cText),
+                            ),
+                          ),
+                          subtitle: Text(result[index].htmlUrl, style: const TextStyle(fontSize: 12, fontWeight: Fw.regular, color: cSubText)),
+                          leading: SizedBox(
+                            width: 60,
+                            height: 60,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(result[index].avatarUrl),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               );
             } else {
               return SkeletonListView(
@@ -92,8 +132,15 @@ class _UserListState extends State<UserList> {
     );
   }
 
+  search(String username) {
+    List<Users> result = [];
+    result = users.where((user) => user.login.toLowerCase().contains(username.toLowerCase())).toList();
+    this.result = result;
+  }
+
   Future<void> loadData() async {
     HttpResponse<List<Users>> response = await usersService.getUsers();
     users = response.data;
+    result = users;
   }
 }
